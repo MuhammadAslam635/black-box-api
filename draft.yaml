@@ -1,0 +1,169 @@
+models:
+  User:
+    name: string
+    email: string:unique
+    password: string
+    remember_token: string:nullable
+    created_at: timestamp
+    updated_at: timestamp
+    relationships:
+      hasOne: Profile
+      hasMany: Content, Like, Comment
+      belongsToMany: Follower
+
+  Profile:
+    user_id: foreignId
+    profile_picture: string:nullable
+    bio: text:nullable
+    created_at: timestamp
+    updated_at: timestamp
+    relationships:
+      belongsTo: User
+
+  Content:
+    user_id: foreignId
+    type: enum:art,film,music
+    title: string:255
+    description: text:nullable
+    file_path: string
+    created_at: timestamp
+    updated_at: timestamp
+    relationships:
+      belongsTo: User
+      hasMany: Like, Comment
+
+  Like:
+    user_id: foreignId
+    content_id: foreignId
+    created_at: timestamp
+    updated_at: timestamp
+    relationships:
+      belongsTo: User, Content
+
+  Comment:
+    user_id: foreignId
+    content_id: foreignId
+    comment: text
+    created_at: timestamp
+    updated_at: timestamp
+    relationships:
+      belongsTo: User, Content
+
+  Follower:
+    follower_id: foreignId (references:users.id)
+    following_id: foreignId (references:users.id)
+    created_at: timestamp
+    updated_at: timestamp
+    relationships:
+      belongsTo: follower:User, following:User
+
+controllers:
+  UserController:
+    index:
+      query: all
+      render: user.index with:users
+    create:
+      render: user.create
+    store:
+      validate: name, email, password
+      save: user
+      redirect: user.index
+    show:
+      render: user.show with:user
+    update:
+      validate: name, email, password
+      save: user
+      redirect: user.show
+    destroy:
+      delete: user
+      redirect: user.index
+
+  ProfileController:
+    index:
+      query: all
+      render: profile.index with:profiles
+    show:
+      render: profile.show with:profile
+    store:
+      validate: user_id, profile_picture, bio
+      save: profile
+      redirect: profile.index
+    update:
+      validate: user_id, profile_picture, bio
+      save: profile
+      redirect: profile.show
+    destroy:
+      delete: profile
+      redirect: profile.index
+
+  ContentController:
+    index:
+      query: all
+      render: content.index with:contents
+    show:
+      render: content.show with:content
+    store:
+      validate: user_id, type, title, description, file_path
+      save: content
+      redirect: content.index
+    update:
+      validate: user_id, type, title, description, file_path
+      save: content
+      redirect: content.show
+    destroy:
+      delete: content
+      redirect: content.index
+
+  LikeController:
+    index:
+      query: all
+      render: like.index with:likes
+    show:
+      render: like.show with:like
+    store:
+      validate: user_id, content_id
+      save: like
+      redirect: like.index
+    update:
+      validate: user_id, content_id
+      save: like
+      redirect: like.show
+    destroy:
+      delete: like
+      redirect: like.index
+
+  CommentController:
+    index:
+      query: all
+      render: comment.index with:comments
+    show:
+      render: comment.show with:comment
+    store:
+      validate: user_id, content_id, comment
+      save: comment
+      redirect: comment.index
+    update:
+      validate: user_id, content_id, comment
+      save: comment
+      redirect: comment.show
+    destroy:
+      delete: comment
+      redirect: comment.index
+
+  FollowerController:
+    index:
+      query: all
+      render: follower.index with:followers
+    show:
+      render: follower.show with:follower
+    store:
+      validate: follower_id, following_id
+      save: follower
+      redirect: follower.index
+    update:
+      validate: follower_id, following_id
+      save: follower
+      redirect: follower.show
+    destroy:
+      delete: follower
+      redirect: follower.index

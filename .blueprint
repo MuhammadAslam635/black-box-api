@@ -1,0 +1,66 @@
+created:
+    - app/Http/Controllers/UserController.php
+    - app/Http/Controllers/ProfileController.php
+    - app/Http/Controllers/ContentController.php
+    - app/Http/Controllers/LikeController.php
+    - app/Http/Controllers/CommentController.php
+    - app/Http/Controllers/FollowerController.php
+    - database/factories/UserFactory.php
+    - database/factories/ProfileFactory.php
+    - database/factories/ContentFactory.php
+    - database/factories/LikeFactory.php
+    - database/factories/CommentFactory.php
+    - database/factories/FollowerFactory.php
+    - database/migrations/2024_05_10_193658_create_users_table.php
+    - database/migrations/2024_05_10_193659_create_profiles_table.php
+    - database/migrations/2024_05_10_193700_create_contents_table.php
+    - database/migrations/2024_05_10_193701_create_likes_table.php
+    - database/migrations/2024_05_10_193702_create_comments_table.php
+    - database/migrations/2024_05_10_193703_create_followers_table.php
+    - database/migrations/2024_05_10_193704_create_follower_user_table.php
+    - app/Models/User.php
+    - app/Models/Profile.php
+    - app/Models/Content.php
+    - app/Models/Like.php
+    - app/Models/Comment.php
+    - app/Models/Follower.php
+    - tests/Feature/Http/Controllers/UserControllerTest.php
+    - tests/Feature/Http/Controllers/ProfileControllerTest.php
+    - tests/Feature/Http/Controllers/ContentControllerTest.php
+    - tests/Feature/Http/Controllers/LikeControllerTest.php
+    - tests/Feature/Http/Controllers/CommentControllerTest.php
+    - tests/Feature/Http/Controllers/FollowerControllerTest.php
+    - app/Http/Requests/UserStoreRequest.php
+    - app/Http/Requests/UserUpdateRequest.php
+    - app/Http/Requests/ProfileStoreRequest.php
+    - app/Http/Requests/ProfileUpdateRequest.php
+    - app/Http/Requests/ContentStoreRequest.php
+    - app/Http/Requests/ContentUpdateRequest.php
+    - app/Http/Requests/LikeStoreRequest.php
+    - app/Http/Requests/LikeUpdateRequest.php
+    - app/Http/Requests/CommentStoreRequest.php
+    - app/Http/Requests/CommentUpdateRequest.php
+    - app/Http/Requests/FollowerStoreRequest.php
+    - app/Http/Requests/FollowerUpdateRequest.php
+    - resources/views/user/index.blade.php
+    - resources/views/user/create.blade.php
+    - resources/views/user/show.blade.php
+    - resources/views/profile/index.blade.php
+    - resources/views/profile/show.blade.php
+    - resources/views/content/index.blade.php
+    - resources/views/content/show.blade.php
+    - resources/views/like/index.blade.php
+    - resources/views/like/show.blade.php
+    - resources/views/comment/index.blade.php
+    - resources/views/comment/show.blade.php
+    - resources/views/follower/index.blade.php
+    - resources/views/follower/show.blade.php
+updated:
+    - routes/web.php
+models:
+    User: { name: string, email: 'string:unique', password: string, remember_token: 'string:nullable', created_at: timestamp, updated_at: timestamp, relationships: { hasOne: Profile, hasMany: 'Content, Like, Comment', belongsToMany: Follower } }
+    Profile: { user_id: foreignId, profile_picture: 'string:nullable', bio: 'text:nullable', created_at: timestamp, updated_at: timestamp, relationships: { belongsTo: User } }
+    Content: { user_id: foreignId, type: 'enum:art,film,music', title: 'string:255', description: 'text:nullable', file_path: string, created_at: timestamp, updated_at: timestamp, relationships: { belongsTo: User, hasMany: 'Like, Comment' } }
+    Like: { user_id: foreignId, content_id: foreignId, created_at: timestamp, updated_at: timestamp, relationships: { belongsTo: 'User, Content' } }
+    Comment: { user_id: foreignId, content_id: foreignId, comment: text, created_at: timestamp, updated_at: timestamp, relationships: { belongsTo: 'User, Content' } }
+    Follower: { follower_id: 'foreignId (references:users.id)', following_id: 'foreignId (references:users.id)', created_at: timestamp, updated_at: timestamp, relationships: { belongsTo: 'follower:User, following:User' } }
